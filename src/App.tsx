@@ -9,6 +9,7 @@ import WaitlistStep from './components/steps/WaitlistStep';
 import { ClinicData } from './types';
 
 function App() {
+  const [showLandingPage, setShowLandingPage] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
   const [clinicData, setClinicData] = useState<ClinicData>({
     name: '',
@@ -40,6 +41,12 @@ function App() {
     }
   };
 
+  const startDemo = () => {
+    setShowLandingPage(false);
+    setCurrentStep(0); // Start at the first step (WebsiteStep)
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const updateClinicData = (data: Partial<ClinicData>) => {
     setClinicData({ ...clinicData, ...data });
   };
@@ -58,8 +65,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-      {currentStep === 0 ? (
-        <Hero onStartDemo={() => setCurrentStep(1)} />
+      {showLandingPage ? (
+        <Hero onStartDemo={startDemo} />
       ) : (
         <div className="container mx-auto px-4 py-8 max-w-5xl">
           <div className="mb-8">
@@ -75,7 +82,7 @@ function App() {
           {renderCurrentStep()}
           
           <div className="flex justify-between mt-8">
-            {currentStep > 0 && currentStep < steps.length - 1 && (
+            {currentStep > 0 && (
               <button
                 onClick={handlePrevStep}
                 className="text-blue-600 hover:text-blue-800 font-medium"

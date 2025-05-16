@@ -94,6 +94,3 @@ voicecal/
 - **Add More Steps**: Add new step components in `src/components/steps/` and update the `steps` array in `App.tsx`.
 - **Change Theme**: Edit `tailwind.config.js` and `src/index.css` for colors and fonts.
 - **Demo Data**: Update `src/utils/simulateData.ts` for different clinic types or services.
-
-## License
-MIT 

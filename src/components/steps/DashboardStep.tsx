@@ -254,25 +254,22 @@ const StatusBadge = ({ status }: { status: string }) => {
     case 'informed':
       color = 'bg-blue-100 text-blue-800';
       icon = <Info size={14} className="mr-1" />;
-      text = 'Informed';
-      break;
-    case 'missed':
-      color = 'bg-red-100 text-red-800';
-      icon = <Info size={14} className="mr-1" />;
-      text = 'Missed';
+      text = 'Info Given';
       break;
     case 'rescheduled':
       color = 'bg-amber-100 text-amber-800';
       icon = <Calendar size={14} className="mr-1" />;
       text = 'Rescheduled';
       break;
+    case 'missed':
     default:
       color = 'bg-gray-100 text-gray-800';
-      text = status;
+      icon = <Clock size={14} className="mr-1" />;
+      text = 'Missed';
   }
   
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${color}`}>
+    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${color}`}>
       {icon}
       {text}
     </span>

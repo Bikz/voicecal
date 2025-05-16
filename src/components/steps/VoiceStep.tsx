@@ -38,19 +38,41 @@ const VoiceStep = ({ onNext, clinicData, updateClinicData, stepNumber }: StepPro
   const [selectedVoice, setSelectedVoice] = useState(clinicData.voiceType || 'calm');
   const [aiName, setAiName] = useState(clinicData.aiName || 'Ava');
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [playbackProgress, setPlaybackProgress] = useState(0);
+  const playbackTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   // In a real implementation, we would use actual audio files
-  // For this demo, we'll simulate audio playback
+  // For this demo, we'll simulate audio playback with progress
   const simulateAudioPlay = (id: string) => {
     if (playingId === id) {
       setPlayingId(null);
+      setPlaybackProgress(0);
+      if (playbackTimerRef.current) {
+        clearInterval(playbackTimerRef.current);
+        playbackTimerRef.current = null;
+      }
       return;
     }
     
     setPlayingId(id);
-    setTimeout(() => {
-      setPlayingId(null);
-    }, 3000);
+    setPlaybackProgress(0);
+    
+    if (playbackTimerRef.current) {
+      clearInterval(playbackTimerRef.current);
+    }
+    
+    // Simulate a 3-second audio clip with progress updates
+    playbackTimerRef.current = setInterval(() => {
+      setPlaybackProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(playbackTimerRef.current!);
+          playbackTimerRef.current = null;
+          setPlayingId(null);
+          return 0;
+        }
+        return prev + 3.33; // Increase by ~3.33% every 100ms to complete in 3 seconds
+      });
+    }, 100);
   };
   
   const handleNext = () => {
@@ -102,6 +124,15 @@ const VoiceStep = ({ onNext, clinicData, updateClinicData, stepNumber }: StepPro
                   <div className="text-sm text-gray-500">
                     {voice.description}
                   </div>
+                  
+                  {playingId === voice.id && (
+                    <div className="mt-2 w-full bg-gray-200 h-1.5 rounded-full">
+                      <div 
+                        className="bg-blue-500 h-1.5 rounded-full transition-all duration-100"
+                        style={{ width: `${playbackProgress}%` }}
+                      ></div>
+                    </div>
+                  )}
                 </div>
                 
                 <button
